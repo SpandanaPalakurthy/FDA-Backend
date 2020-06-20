@@ -63,7 +63,7 @@ pipeline {
 	    }
 	    post {
 	    always {
-	       archiveArtifacts artifacts: 'foodapplication/food-delivery-system/target/**'
+	       archiveArtifacts artifacts: 'food-delivery-system/target/**'
 	      cleanWs()
 	    }
 	  }
