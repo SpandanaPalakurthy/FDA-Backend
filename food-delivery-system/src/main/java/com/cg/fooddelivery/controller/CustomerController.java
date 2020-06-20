@@ -148,6 +148,8 @@ public class CustomerController {
 			e.printStackTrace();
 		}
 		return payment;
+		
+		/* get all payment details */
 	}
 	@RequestMapping(value = "/getPaymentDetails", method = RequestMethod.GET)
 	public List<Payment> getPaymentDetails() throws FoodDeliverySystemException {
@@ -172,6 +174,8 @@ public class CustomerController {
 	 } return null;
 	 }
 	 
+	 /* getting customer orders by orderId */
+	 
 	 @RequestMapping(value = "/getcustomerOrders/{orderId}", method =RequestMethod.GET)
 	  public Optional<Orders> getOrdersbyorderId(@PathVariable int orderId) throws FoodDeliverySystemException { 
 		 try { 
@@ -183,20 +187,6 @@ public class CustomerController {
 	 } return null;
 	 }
 
-	/*
-	 * @RequestMapping(value = "/getOrders/{customerId}", method =
-	 * RequestMethod.GET) public List<Orders>
-	 * getOrdersbycustId(@Valid @RequestParam(required = false) int customerId){
-	 * return customerService.getorderhistory(customerId);
-	 * 
-	 * }
-	 */
-	/*
-	 * @RequestMapping(value = "/getOrders/{customerId}", method =
-	 * RequestMethod.GET) public Orders getorderdetails(@PathVariable int
-	 * customerId) {
-	 * 
-	 * return customerService.getorderdetails(customerId); }
-	 */
+	
 		
 }

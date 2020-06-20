@@ -21,13 +21,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import com.cg.fooddelivery.model.Admin;
+import com.cg.fooddelivery.model.Orders;
 import com.cg.fooddelivery.model.RestaurantItem;
+import com.cg.fooddelivery.repository.OrdersRepository;
 import com.cg.fooddelivery.repository.RestaurantOwnerRepository;
 import com.cg.fooddelivery.repository.RestaurantRepository;
 import com.cg.fooddelivery.service.impl.CustomerService;
 import com.cg.fooddelivery.service.impl.RestaurantService;
 
-//@RunWith(MockitoJUnitRunner.Silent.class)
+
 @SpringBootTest
 public class FooddeliveryRestaurantTest extends FooddeliveryMainTests {
 
@@ -38,14 +40,9 @@ public class FooddeliveryRestaurantTest extends FooddeliveryMainTests {
 
 	@Mock
 	private RestaurantRepository restaurantRepository;
-	/*
-	 * @Autowired private TestRestTemplate restTemplate;
-	 * 
-	 * @LocalServerPort private int port;
-	 * 
-	 * private String getRootUrl() { return "http://localhost:" + port;
-	 */
-    
+	
+	@Mock
+	private OrdersRepository ordersRepository;
 	@Test
 	public void addFoodItemsTest() {
 		RestaurantItem restaurantitem = new RestaurantItem();
@@ -82,18 +79,6 @@ public class FooddeliveryRestaurantTest extends FooddeliveryMainTests {
 	 * 
 	 */ 
 
-	/*
-	 * @Test public void updateItemsTest() { int itemId = 1; RestaurantItem restitem
-	 * = restTemplate.getForObject(getRootUrl() + "/restaurantItems/{itemId}" +
-	 * itemId, RestaurantItem.class); restitem.setItemname("cc");
-	 * restitem.setItemdescription("aa"); restitem.setItemPrice(12);
-	 * restitem.setItemId(1);
-	 * 
-	 * restTemplate.put(getRootUrl() + "/employees/" + itemId, restitem);
-	 * RestaurantItem updatedRestaurantItem = restTemplate.getForObject(getRootUrl()
-	 * + "/restaurantItems/{itemId}" + itemId, RestaurantItem.class);
-	 * assertNotNull(updatedRestaurantItem); }
-	 */
 	
 	@Test
 	public void deleteFoodDetailsTest() {
@@ -103,15 +88,39 @@ public class FooddeliveryRestaurantTest extends FooddeliveryMainTests {
 	}
 
 	
-	/*
-	 * @Test public void updateItemsTest() { int itemId = 12; RestaurantItem
-	 * restitem = new RestaurantItem(); restitem.setItemname("coffe");
-	 * restitem.setItemPrice(12); restitem.setItemdescription("drinks");
-	 * restOwnerRepository.save(restitem);
-	 * 
-	 * RestaurantItem restexp = restserviceimpl.updateFoodItems(restitem, 28);
-	 * assertThat(restexp.getItemId()).isEqualTo(restitem);
-	 * 
-	 * }
-	 */
+	
+	@Test
+	public void updateItemsTest() {
+		
+		RestaurantItem restaurantitem = new RestaurantItem();
+		restaurantitem.setItemId(10);
+		restaurantitem.setItemname("coffe");
+		restaurantitem.setItemPrice(12);
+		restaurantitem.setItemdescription("drinks");
+		when(restOwnerRepository.getOne(10)).thenReturn(restaurantitem);
+		when(restOwnerRepository.save(restaurantitem)).thenReturn(restaurantitem);
+		
+		RestaurantItem restexp = restserviceimpl.updateFoodItems(restaurantitem, restaurantitem.getItemId());
+		System.out.println("**" + restaurantitem.toString());
+		System.out.println("--" + restaurantitem.toString());
+		assertEquals(restexp, restaurantitem);
+
+	}
+
+	@Test
+	public void updateorderTest() {
+		Orders orders = new Orders();
+		orders.setOrderId(111);
+		orders.setOrderDate("12/2/2020");
+		orders.setOrderStatus("deliverd");
+		orders.setOrderTotalAmount(900);
+		when(ordersRepository.getOne(111)).thenReturn(orders);
+		when(ordersRepository.save(orders)).thenReturn(orders);
+		
+		Orders exporders = restserviceimpl.updateOrders(orders, orders.getOrderId());
+		assertEquals(exporders, orders);
+				
+	}
+	
+	
 }

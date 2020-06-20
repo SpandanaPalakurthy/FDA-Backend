@@ -32,7 +32,7 @@ public class AdminController {
 
 	}
 
-	/** Admin registeration **/
+	/** Admin registration **/
 
 	@RequestMapping(value = "/addadmin", method = RequestMethod.POST)
 	public Admin addAdmin(@Valid @RequestBody Admin admin) throws FoodDeliverySystemException {

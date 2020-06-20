@@ -1,6 +1,8 @@
 package com.cg.fooddelivery;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.stream.Collectors;
@@ -15,8 +17,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cg.fooddelivery.model.Admin;
 import com.cg.fooddelivery.model.Customer;
+import com.cg.fooddelivery.model.Orders;
 import com.cg.fooddelivery.model.Payment;
 import com.cg.fooddelivery.model.Restaurant;
+import com.cg.fooddelivery.model.RestaurantItem;
 import com.cg.fooddelivery.repository.CustomerRepository;
 import com.cg.fooddelivery.repository.OrdersRepository;
 import com.cg.fooddelivery.repository.PaymentRepository;
@@ -96,6 +100,24 @@ public class FooddeliveryCustomerTest extends FooddeliveryMainTests {
 	 */
 
 	@Test
+	public void addOrderTest() {
+		Orders orders = new Orders();
+		orders.setOrderId(90);
+		orders.setOrderDate("4/2/2020");
+		orders.setOrderStatus("delivered");
+		orders.setOrderTotalAmount(1000);
+		when(ordersRepository.getOne(90)).thenReturn(orders);
+		when(ordersRepository.save(orders)).thenReturn(orders);
+		
+		Orders expectedorder = customerserviceimpl.createOrder(orders, 12);
+		System.out.println("**" + orders.toString());
+		System.out.println("--" + orders.toString());
+		assertEquals(expectedorder, orders);
+	}
+	
+	
+	
+	@Test
 	public void makepaymentTest() {
 		Payment payment = new Payment();
 		payment.setPaymentId(100);
@@ -117,5 +139,12 @@ public class FooddeliveryCustomerTest extends FooddeliveryMainTests {
 		when(paymentRepository.findAll()).thenReturn(Stream.of(new Payment(11, "1654126632", "12/2020", 222, "spandy"),
 				new Payment(11, "1654126632", "12/2020", 111, "spandy")).collect(Collectors.toList()));
 		assertEquals(2, customerserviceimpl.getPaymentDetails().size());
+	}
+	
+	@Test
+	public void deleteFoodItemsTest() {
+		RestaurantItem restitem = new RestaurantItem(101, "milk", "drink", 20);
+		customerserviceimpl.deleteFoodItems(6);
+		verify(ordersRepository, times(1)).deleteById(6);
 	}
 }
